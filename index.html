@@ -3,73 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>默寫大挑戰</title>
+    <title>默寫大挑戰 Pro</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        :root { --win-color: #2ECC71; --primary: #4A90E2; }
-        body { font-family: -apple-system, sans-serif; background: #F0F4F8; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; touch-action: manipulation; }
-        .card { background: white; border-radius: 25px; padding: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.08); width: 100%; max-width: 360px; text-align: center; }
-        .q-img { width: 150px; height: 150px; object-fit: contain; border-radius: 15px; margin-bottom: 10px; background: #f9f9f9; }
-        .zh-text { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 5px; }
-        .star-display { color: #F1C40F; font-size: 18px; margin-bottom: 15px; }
-        .audio-btn { background: #FF9F43; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 30px; margin: 10px 0; box-shadow: 0 4px 0 #d38336; cursor: pointer; }
-        .audio-btn:active { transform: translateY(2px); box-shadow: none; }
-        .answer-box { font-size: 40px; font-weight: bold; letter-spacing: 6px; margin: 20px 0; min-height: 50px; color: var(--primary); border-bottom: 3px solid #eee; width: 100%; text-transform: lowercase; }
-        .keyboard { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; width: 100%; }
-        .key { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 14px 0; font-size: 18px; font-weight: bold; box-shadow: 0 3px 0 #eee; }
+        :root { --main: #4A90E2; --success: #2ECC71; --bg: #FDF6E3; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; touch-action: manipulation; }
+        .card { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); width: 100%; max-width: 360px; text-align: center; }
+        .q-img { width: 140px; height: 140px; object-fit: contain; border-radius: 15px; margin-bottom: 10px; background: #fdfdfd; border: 2px solid #eee; }
+        .zh-text { font-size: 28px; font-weight: bold; color: #333; margin: 5px 0; }
+        .star-display { color: #F1C40F; font-size: 18px; margin-bottom: 10px; font-weight: bold; }
+        .audio-btn { background: #FF9F43; color: white; border: none; border-radius: 50%; width: 55px; height: 55px; font-size: 28px; margin: 10px 0; box-shadow: 0 4px 0 #d38336; outline: none; }
+        .answer-box { font-size: 36px; font-weight: bold; letter-spacing: 5px; margin: 15px 0; min-height: 45px; color: var(--main); border-bottom: 3px solid #eee; width: 100%; text-transform: lowercase; }
+        .keyboard { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; width: 100%; }
+        .key { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 12px 0; font-size: 18px; font-weight: bold; box-shadow: 0 3px 0 #eee; -webkit-tap-highlight-color: transparent; }
         .key:active { background: #f0f0f0; transform: translateY(2px); box-shadow: none; }
-        .footer-btns { display: flex; gap: 10px; width: 100%; margin-top: 20px; }
-        .f-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 14px; }
-        .btn-del { background: #ecf0f1; color: #7f8c8d; }
-        .btn-hint { background: #9B59B6; color: white; }
-        #feedback { font-size: 60px; position: fixed; top: 30%; pointer-events: none; }
+        .ctrl-btns { display: flex; gap: 8px; width: 100%; margin-top: 15px; }
+        .c-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 14px; color: white; }
+        .btn-del { background: #95a5a6; }
+        .btn-hint { background: #9B59B6; }
+        .admin-section { margin-top: 25px; width: 100%; max-width: 360px; background: #f0f0f0; padding: 15px; border-radius: 15px; text-align: left; box-sizing: border-box; }
+        input { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+        .add-btn { width: 100%; padding: 12px; background: #444; color: white; border: none; border-radius: 8px; margin-top: 5px; font-weight: bold; }
+        #feedback { font-size: 60px; position: fixed; top: 30%; pointer-events: none; z-index: 100; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="star-display">🌟 獲得星星: <span id="stars">0</span></div>
+        <div class="star-display">🌟 星星: <span id="stars">0</span> | 詞庫: <span id="total">0</span></div>
         <div id="pic"></div>
         <div class="zh-text" id="zh"></div>
         <button class="audio-btn" onclick="speak()">🔊</button>
         <div class="answer-box" id="ans"></div>
         <div class="keyboard" id="kb"></div>
-        <div class="footer-btns">
-            <button class="f-btn btn-del" onclick="del()">刪除字母</button>
-            <button class="f-btn btn-hint" onclick="hint()">給個提示</button>
+        <div class="ctrl-btns">
+            <button class="c-btn btn-del" onclick="del()">刪除</button>
+            <button class="c-btn btn-hint" onclick="hint()">提示</button>
         </div>
     </div>
-    <div id="feedback"></div>
 
+    <div class="admin-section">
+        <h4 style="margin:0;">家長管理</h4>
+        <input type="text" id="newEn" placeholder="英文單詞">
+        <input type="text" id="newZh" placeholder="中文翻譯">
+        <button class="add-btn" onclick="addNew()">存入此手機詞庫</button>
+        <button onclick="resetData()" style="background:none; border:none; color:red; font-size:12px; text-decoration:underline; margin-top:10px; width:100%;">恢復預設詞庫</button>
+    </div>
+
+    <div id="feedback"></div>
     <audio id="sWin" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
     <audio id="sLose" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"></audio>
 
     <script>
-        const defaults = [{en:'bee',zh:'蜜蜂'},{en:'bird',zh:'小鳥'},{en:'tree',zh:'樹木'},{en:'sky',zh:'天空'},{en:'ant',zh:'螞蟻'}];
+        const defaults = [{en:'bee',zh:'蜜蜂'},{en:'ant',zh:'螞蟻'},{en:'bird',zh:'小鳥'},{en:'tree',zh:'樹木'},{en:'sky',zh:'天空'}];
         let words = [], cur = {}, input = "", stars = 0;
 
         function load() {
-            // 自動同步「練習版」的新增單詞
             const saved = localStorage.getItem('mySpellingWordsV2');
             words = saved ? JSON.parse(saved) : [...defaults];
+            if(!saved) localStorage.setItem('mySpellingWordsV2', JSON.stringify(words));
             next();
         }
 
         function speak() {
             const u = new SpeechSynthesisUtterance(cur.en);
-            u.lang = 'en-US'; u.rate = 0.7;
-            window.speechSynthesis.speak(u);
+            u.lang = 'en-US'; u.rate = 0.7; window.speechSynthesis.speak(u);
         }
 
         function next() {
-            input = ""; 
-            document.getElementById('feedback').innerText = "";
+            input = ""; document.getElementById('feedback').innerText = "";
+            document.getElementById('total').innerText = words.length;
             cur = words[Math.floor(Math.random() * words.length)];
             document.getElementById('zh').innerText = cur.zh;
-            document.getElementById('pic').innerHTML = `<img src="https://source.unsplash.com/400x400/?${cur.en}" class="q-img">`;
+            document.getElementById('pic').innerHTML = `<img src="https://source.unsplash.com/400x400/?${cur.en}" class="q-img" onclick="speak()">`;
             render();
-            setTimeout(speak, 500);
+            setTimeout(speak, 600);
         }
 
         function render() {
@@ -99,7 +107,27 @@
         }
 
         function del() { input = input.slice(0,-1); render(); }
-        function hint() { type(cur.en[input.length].toLowerCase()); }
+        function hint() { if(input.length < cur.en.length) type(cur.en[input.length].toLowerCase()); }
+
+        function addNew() {
+            const en = document.getElementById('newEn').value.trim().toLowerCase();
+            const zh = document.getElementById('newZh').value.trim();
+            if(en && zh) {
+                words.push({en, zh});
+                localStorage.setItem('mySpellingWordsV2', JSON.stringify(words));
+                alert("已成功加入詞庫！");
+                document.getElementById('newEn').value = "";
+                document.getElementById('newZh').value = "";
+                next();
+            }
+        }
+
+        function resetData() {
+            if(confirm("確定要刪除所有自加單詞嗎？")) {
+                localStorage.removeItem('mySpellingWordsV2');
+                location.reload();
+            }
+        }
 
         const kb = document.getElementById('kb');
         "abcdefghijklmnopqrstuvwxyz".split('').forEach(l => {
